@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Concept Extraction Website</title>
+  </head>
+  <body>
+    <header>
+      <h1>Concept Extraction Website</h1>
+    </header>
+
+    <nav>
+      <div class="logo">
+        <img src="../img/logo.png" alt="Website Logo" height="40" />
+        <span style="margin-left: 10px">Concept Extractor</span>
+      </div>
+      <div class="nav-link">
+        <a href="#">Home</a>
+        <a href="#">About</a>
+      </div>
+    </nav>
+    <main>
+      <form class="" onsubmit="return Client.summarize(event)">
+        <input
+          id="name"
+          type="text"
+          name="input"
+          value=""
+          placeholder="Enter URL"
+        />
+        <input
+          type="number"
+          id="number-of-sentences"
+          min="1"
+          max="10"
+          value="5"
+        />
+        <input
+          type="submit"
+          name=""
+          value="Submit"
+          onclick="return Client.summarize(event)"
+        />
+      </form>
+      <div id="conceptResults">
+        <!-- Concepts will be displayed here -->
+      </div>
+    </main>
+    <!-- <script src="script.js"></script> -->
+  </body>
+</html>
