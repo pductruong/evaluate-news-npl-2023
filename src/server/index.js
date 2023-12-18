@@ -60,15 +60,3 @@ app.post("/sum_api", async (req, res) => {
     });
   }
 });
-// Define a route for the test API
-app.post("/test_api", (req, res) => {
-  // Extract JSON data from the request body
-  const requestData = req.body;
-
-  // Echo the received JSON data in the response
-  res.json({
-    success: true,
-    message: "Data received successfully",
-    data: requestData,
-  });
-});
