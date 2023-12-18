@@ -3,17 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Concept Extraction Website</title>
+    <title>Summarization Document Website</title>
   </head>
   <body>
     <header>
-      <h1>Concept Extraction Website</h1>
+      <h1>Summarization Document Website</h1>
     </header>
 
     <nav>
       <div class="logo">
         <img src="../img/logo.png" alt="Website Logo" height="40" />
-        <span style="margin-left: 10px">Concept Extractor</span>
+        <span style="margin-left: 10px">Concept Summarization</span>
       </div>
       <div class="nav-link">
         <a href="#">Home</a>
@@ -21,30 +21,37 @@
       </div>
     </nav>
     <main>
-      <form class="" onsubmit="return Client.summarize(event)">
+      <form id="form" class="" onsubmit="return Client.summarize(event)">
+        <div class="form-content">
+          <span>Please enter your paragraph which need to summarized:</span>
+          <textarea id="text-box" placeholder="Enter your text"></textarea>
+        </div>
+        <div class="num-sentences-container">
+          <span>
+            How many sentences do you want me to summarize the text into? Please
+            enter the number in the box:
+          </span>
+          <input
+            type="number"
+            id="number-of-sentences"
+            min="1"
+            max="10"
+            value="5"
+          />
+        </div>
         <input
-          id="name"
-          type="text"
-          name="input"
-          value=""
-          placeholder="Enter URL"
-        />
-        <input
-          type="number"
-          id="number-of-sentences"
-          min="1"
-          max="10"
-          value="5"
-        />
-        <input
+          id="submit-btn"
           type="submit"
           name=""
           value="Submit"
           onclick="return Client.summarize(event)"
         />
       </form>
+
       <div id="conceptResults">
-        <!-- Concepts will be displayed here -->
+        <span>Result:</span>
+        <br />
+        <textarea id="result" placeholder="Results"></textarea>
       </div>
     </main>
     <!-- <script src="script.js"></script> -->

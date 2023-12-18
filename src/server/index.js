@@ -1,57 +1,74 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const axios = require("axios"); // For making API calls
+const cors = require("cors");
 const dotenv = require("dotenv").config();
 
 const app = express();
+app.use(cors());
 app.use(express.static("dist/client"));
+app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-const port = 3000;
+console.log(__dirname);
+const port = 8080;
 const apiKey = process.env.API_KEY;
+
+// Error-handling middleware
+app.use(function (err, req, res, next) {
+  console.error(err.stack);
+  res.status(500).send("Something broke!");
+});
 
 app.get("/", function (req, res) {
   res.sendFile("dist/index.html");
 });
 
+app.listen(port, function () {
+  console.log(`Server listening on port ${port}`);
+});
+
 app.post("/sum_api", async (req, res) => {
-  const text = req.body.text; // Get user-submitted text
-  const sentences = req.body.sentences || 5; // Sentence count or default
-
-  console.log(text, sentences);
-
-  const formdata = new FormData();
-  formdata.append("key", apiKey); // Use your actual API key
-  formdata.append("source_text", text); // Correct key for text parameter
-  formdata.append("sentences", sentences);
+  const text = req.body.text;
+  const sentences = req.body.sentences || 5;
 
   const url = "https://api.meaningcloud.com/summarization-1.0";
-  const options = {
+
+  const formdata = new FormData();
+  formdata.append("key", apiKey);
+  formdata.append("txt", text);
+  formdata.append("sentences", sentences);
+
+  const requestOptions = {
     method: "POST",
     body: formdata,
     redirect: "follow",
-    headers: {
-      "Content-Type": "multipart/form-data", // Update content type for FormData
-    },
   };
 
   try {
-    const response = await axios(url, options);
+    const response = await fetch(url, requestOptions);
     const data = await response.json();
-    const summary = data.summary;
 
     res.json({
       success: true,
-      summary,
+      data,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Error: ", error);
     res.json({
       success: false,
       message: "Error summarizing text",
     });
   }
 });
-app.listen(port, function () {
-  console.log("Heyyyyyyyyyyyyyyy");
-  console.log(`Server listening on port ${port}`);
+// Define a route for the test API
+app.post("/test_api", (req, res) => {
+  // Extract JSON data from the request body
+  const requestData = req.body;
+
+  // Echo the received JSON data in the response
+  res.json({
+    success: true,
+    message: "Data received successfully",
+    data: requestData,
+  });
 });

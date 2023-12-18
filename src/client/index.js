@@ -2,6 +2,6 @@ import "./styles/nav.scss";
 import "./styles/body_styles.scss";
 import "./img/logo.png";
 
-import { summarize } from "./js/handle_api.js";
+import { summarize, sendSummarizeRequest } from "./js/handler.js";
 
-export { summarize };
+export { summarize, sendSummarizeRequest };

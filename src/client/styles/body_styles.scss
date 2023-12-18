@@ -1,3 +1,52 @@
 #conceptResults {
   margin-top: 20px;
 }
+
+main {
+}
+
+main #form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+  padding-top: 0px;
+}
+
+main form .form-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+#text-box {
+  width: 80%;
+  height: 300px;
+}
+
+main form .num-sentences-container {
+  padding: 10px;
+}
+
+main form #number-of-sentences {
+  width: 40px;
+  height: 20px;
+}
+
+#submit-btn {
+  width: 60px;
+  height: 30px;
+}
+
+#result {
+  width: 80%;
+  height: 300px;
+}
+
+#conceptResults {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
