@@ -111,8 +111,12 @@ function getSummaryMessage(sentimentAnalysisResult) {
     return `The overall sentiment of the text is ${getSentimentMessage(
       scoreTag,
     ).toLowerCase()}.`;
-  } else {
+  } else if (agreement === "DISAGREEMENT") {
     return "There is disagreement in sentiment analysis results for different entities/themes in the text.";
+  } else if (agreement === "NO AGREEMENT") {
+    return "There is no clear agreement in sentiment analysis results for different entities/themes in the text.";
+  } else {
+    return "Unknown agreement status.";
   }
 }
 
@@ -129,4 +133,4 @@ function getSentimentMessage(scoreTag) {
   }
 }
 
-export { analyzeSentiment };
+export { analyzeSentiment, getSummaryMessage, getSentimentMessage };

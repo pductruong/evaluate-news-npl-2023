@@ -1,51 +1,72 @@
-import { summarize, sendSummarizeRequest } from "../src/client/js/handler.js";
+import {
+  getSentimentMessage,
+  getSummaryMessage,
+} from "../src/client/js/handler.js";
 
-// Mocking the fetch function
-global.fetch = jest.fn(() =>
-  Promise.resolve({
-    json: () =>
-      Promise.resolve({
-        success: true,
-        data: { status: { code: "0" }, summary: "Mocked summary" },
-      }),
-  }),
-);
-
-// Test for sendSummarizeRequest function
-describe("sendSummarizeRequest", () => {
-  it("should send a summarize request and return data", async () => {
-    const result = await sendSummarizeRequest("sample text", 3);
-
-    expect(fetch).toHaveBeenCalledWith("http://localhost:8080/sum_api", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ text: "sample text", sentences: 3 }),
+describe("Client-side functions", () => {
+  describe("getSentimentMessage", () => {
+    test("returns correct sentiment message for positive score tag", () => {
+      const message = getSentimentMessage("P");
+      expect(message).toBe("positive");
     });
 
-    expect(result).toEqual({
-      success: true,
-      data: { status: { code: "0" }, summary: "Mocked summary" },
+    test("returns correct sentiment message for negative score tag", () => {
+      const message = getSentimentMessage("N");
+      expect(message).toBe("negative");
+    });
+
+    test("returns correct sentiment message for neutral score tag", () => {
+      const message = getSentimentMessage("NEU");
+      expect(message).toBe("neutral");
+    });
+
+    test("returns empty string for unknown score tag", () => {
+      const message = getSentimentMessage("UNKNOWN");
+      expect(message).toBe("");
     });
   });
-});
 
-// Test for summarize function
-describe("summarize", () => {
-  it("should update result element with summary", async () => {
-    document.body.innerHTML =
-      '<div id="text-box"></div><div id="number-of-sentences"></div><div id="result"></div>';
+  describe("Client-side functions", () => {
+    describe("getSummaryMessage", () => {
+      test("returns correct summary message for AGREEMENT status", () => {
+        const analysisResult = {
+          score_tag: "P",
+          agreement: "AGREEMENT",
+        };
+        const message = getSummaryMessage(analysisResult);
+        expect(message).toBe("The overall sentiment of the text is positive.");
+      });
 
-    document.getElementById("text-box").value = "sample text";
-    document.getElementById("number-of-sentences").value = 3;
+      test("returns correct summary message for DISAGREEMENT status", () => {
+        const analysisResult = {
+          score_tag: "P",
+          agreement: "DISAGREEMENT",
+        };
+        const message = getSummaryMessage(analysisResult);
+        expect(message).toBe(
+          "There is disagreement in sentiment analysis results for different entities/themes in the text.",
+        );
+      });
 
-    await summarize(new Event("submit"));
+      test("returns correct summary message for NO AGREEMENT status", () => {
+        const analysisResult = {
+          score_tag: "P",
+          agreement: "NO AGREEMENT",
+        };
+        const message = getSummaryMessage(analysisResult);
+        expect(message).toBe(
+          "There is no clear agreement in sentiment analysis results for different entities/themes in the text.",
+        );
+      });
 
-    expect(document.getElementById("result").textContent).toEqual(
-      "Mocked summary",
-    );
+      test("returns correct summary message for UNKNOWN status", () => {
+        const analysisResult = {
+          score_tag: "P",
+          agreement: "UNKNOWN",
+        };
+        const message = getSummaryMessage(analysisResult);
+        expect(message).toBe("Unknown agreement status.");
+      });
+    });
   });
-
-  // Add more test cases for different scenarios
 });
