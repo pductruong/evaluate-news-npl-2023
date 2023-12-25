@@ -1,3 +1,4 @@
+const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -5,7 +6,7 @@ const dotenv = require("dotenv").config();
 
 const app = express();
 app.use(cors());
-app.use(express.static("dist/client"));
+app.use(express.static("dist"));
 app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -20,7 +21,7 @@ app.use(function (err, req, res, next) {
 });
 
 app.get("/", function (req, res) {
-  res.sendFile("dist/index.html");
+  res.sendFile(path.resolve("dist/index.html"));
 });
 
 app.listen(port, function () {
