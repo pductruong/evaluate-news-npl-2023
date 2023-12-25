@@ -27,16 +27,15 @@ app.listen(port, function () {
   console.log(`Server listening on port ${port}`);
 });
 
-app.post("/sum_api", async (req, res) => {
-  const text = req.body.text;
-  const sentences = req.body.sentences || 5;
+app.post("/analyzeSentiment", async (req, res) => {
+  const textToAnalyze = req.body.text;
 
-  const url = "https://api.meaningcloud.com/summarization-1.0";
+  const url = "https://api.meaningcloud.com/sentiment-2.1";
 
   const formdata = new FormData();
   formdata.append("key", apiKey);
-  formdata.append("txt", text);
-  formdata.append("sentences", sentences);
+  formdata.append("txt", textToAnalyze);
+  formdata.append("lang", "en");
 
   const requestOptions = {
     method: "POST",
@@ -46,17 +45,15 @@ app.post("/sum_api", async (req, res) => {
 
   try {
     const response = await fetch(url, requestOptions);
-    const data = await response.json();
-
+    const sentimentAnalyzeResult = await response.json();
+    // console.log(sentimentAnalyzeResult);
     res.json({
-      success: true,
-      data,
+      sentimentAnalyzeResult,
     });
   } catch (error) {
-    console.error("Error: ", error);
-    res.json({
-      success: false,
-      message: "Error summarizing text",
+    console.error("Error making API request: ", error.message);
+    res.status(500).json({
+      error: "Internal Server Error",
     });
   }
 });
